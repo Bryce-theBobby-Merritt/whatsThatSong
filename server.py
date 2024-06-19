@@ -10,9 +10,14 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/guessingGame')
+@app.route('/guessingGame', methods=['GET', 'POST'])
 def guessingGame():
     user_playlist_link_input = handle_input(request.args.get('playlist_link'))
+
+    if request.method == 'POST':
+        guess = request.form.get('song_guess')
+        print(guess)
+
     return render_template('guessingGame.html', playlist_link=user_playlist_link_input)
 
 
