@@ -4,20 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guess the Song!</title>
-    <link href = "{{ url_for('static', filename='styles/style/css')}}" rel="stylesheet" />
+    <link href = "{{ url_for('static', filename='css/style.css')}}" rel="stylesheet" />
 </head>
 <body>
     <h1>Guess the song:</h1>
     <p>{{ playlist_id }}</p>
 
-    <form method="POST">
+    <form id="guess">
         <input type="text" name="song_guess" id="song_guess" placeholder="Guess the Song:" />
         <button type="submit">GUESS</button>
     </form>
 
-   
-    <p> {% if user_guess != None %} {{ user_guess }} {% endif %}</p>
+    <p> Current Song: {{ current_song }}</p>
 
+    <div id="user_guess_div"></div>
 
+    <div id="user_guess_div2"> {% if user_guess != None %} {{ user_guess }} {% endif %}</div>
 </body>
 </html>

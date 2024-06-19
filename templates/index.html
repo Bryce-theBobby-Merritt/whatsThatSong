@@ -4,12 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload your Playlist</title>
-    <link href = "{{ url_for('static', filename='styles/style/css')}}" rel="stylesheet" />
+    <link href = "{{ url_for('static', filename='css/style.css')}}" rel="stylesheet" />
 </head>
 <body>
-    <h1>Upload your Playlist:</h1>
-    <form action="/guessingGame">
-        <input type="text" name="playlist_link" id="playlist" placeholder="Paste your Spotify playlist link:" />
+    {% if preview == None %}
+        <h1>Upload your Playlist None:</h1>
+        <form id="playlist_form" action = "/" method="POST">
+            <input type="text" name="playlist_link" id="playlist" placeholder="Paste your Spotify playlist link:" />
+            <button type="submit">Upload</button>
+        </form>
+    {% endif %}
+
+    {% if preview != None %}
+        <h1>Upload a Different Playlist:</h1>
+        <form id="playlist_form" action = "/" method="POST">
+            <input type="text" name="playlist_link" id="playlist" placeholder="Paste your Spotify playlist link:" />
+            <button type="submit">Upload</button>
+        </form>
+
+        <ul>
+            {% for result in preview %}
+            <li>{{ result }}</li>
+            {% endfor %}
+        </ul>
+
+    {% endif %}
+
+    <form id="go_forward_button_form" action="/guessingGame" method="GET">
         <button type="submit">Go!</button>
     </form>
 </body>

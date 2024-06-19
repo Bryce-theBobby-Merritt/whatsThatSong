@@ -1,0 +1,49 @@
+* {
+    box-sizing: border-box;
+}
+
+form input[type=text] {
+    padding: 10px;
+    font-size: 17px;
+    border: 1px solid grey;
+    float: left;
+    width: 80%;
+    background: #f1f1f1;
+}
+
+/* Style the submit button */
+form button {
+    float: left;
+    width: 20%;
+    padding: 10px;
+    background: #2196F3;
+    color: white;
+    font-size: 17px;
+    border: 1px solid grey;
+    border-left: none; /* Prevent double borders */
+    cursor: pointer;
+  }
+
+form[id=go_forward_button_form] {
+    float: none;
+    position: absolute;
+    right: 40%;
+    bottom: 0;
+    width: 20%;
+    padding: 10px;
+    background: #0044ff;
+    color: white;
+    font-size: 17px;
+    border: 1px solid grey;
+    border-left: none; /* Prevent double borders */
+    cursor: pointer;
+    align-items: center;
+}
+
+form[id=go_forward_button_form] button[type=submit] {
+    align-items: center;
+    position: relative;
+    left: 40%;
+    bottom: 50%;
+    width: 20%
+}

@@ -5,6 +5,8 @@ def get_playlist_id_from_link(user_input_playlist_link: str) -> str:
         - that it has a .com and a https://open.spotify.com/playlist/
         - MORE
 
+        #TODO handle empty inputs, add grey out / prevent progress until link is validated
+
 
         https://open.spotify.com/playlist/312Cr7cPq6bXu4b40ZB2DU?si=f8cd0d4bb5744d0c
     """

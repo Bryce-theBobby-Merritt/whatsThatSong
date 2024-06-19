@@ -1,4 +1,4 @@
-class Song():
+class Song(object):
     def __init__(self, name: str, artist: str, uri: str, album_cover_path: str) -> None:
         self._name = name
         self._artist = artist

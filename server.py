@@ -1,45 +1,51 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from waitress import serve
 from input_handling import get_playlist_id_from_link
 from Game import Game
 
-app = Flask(__name__)
+#overarching control variables
+production = False
+development = True
 
+
+app = Flask(__name__)
 game = Game()
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 @app.route('/index')
 def index():
-    return render_template('index.html')
-
-
-@app.route('/guessingGame', methods=['GET', 'POST'])
-def guessingGame():
-    guess = None
-
     if request.method == 'GET':
-        user_playlist_id = get_playlist_id_from_link(request.args.get('playlist_link'))
+        return render_template('index.html', preview=None)
 
+    elif request.method == 'POST':
+        user_playlist_id = get_playlist_id_from_link(request.form.get('playlist_link'))
+        print(user_playlist_id)
         game.set_playlist_id(user_playlist_id)
         game.get_all_tracks_from_playlist_id()
         game.ready_game()
         game.start()
 
-        return render_template('guessingGame.html', playlist_id=user_playlist_id)
+        return render_template('index.html', preview=game.get_all_song_names())
 
 
-    if request.method == 'POST':
-        guess = request.form.get('song_guess')
-        print(guess)
 
-        return render_template('guessingGame.html', user_guess=guess)
+@app.route('/guessingGame', methods=['GET'])
+def guessingGame():
+    return render_template('guessingGame.html', current_song=game.get_current_song().get_name(), search_options=game.get_all_song_names())
+        
 
+@app.route("/guess", methods=['POST'])
+def guess():
+    guess = request.form.get('song_guess')
+    return render_template('guessingGame.html', user_guess=guess, current_song=game.get_current_song().get_name(), search_options=game.get_all_song_names())
 
 
 if __name__ == "__main__":
     #For production, use serve:
-    #serve(app, host="0.0.0.0", port=8000)
+    if production and not development:
+        serve(app, host="0.0.0.0", port=8000)
 
     #For development (featuring live file updates), use localhost without serving:
-    app.run(host="0.0.0.0", port=8000)
+    if development and not production:
+        app.run(host="0.0.0.0", port=8000)

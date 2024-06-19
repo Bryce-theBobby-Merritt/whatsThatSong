@@ -38,6 +38,10 @@ class Game():
 
     def get_all_songs(self) -> list[Song]:
         return self._all_songs
+    
+    
+    def get_all_song_names(self) -> list[str]:
+        return [s.get_name() for s in self._all_songs]
 
 
     #should only be used for testing
