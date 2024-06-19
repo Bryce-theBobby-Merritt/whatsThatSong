@@ -60,6 +60,7 @@ class Game():
     
     def start(self) -> None:
         #TODO
+        print("[STARTING GAME]")
         pass
 
 
