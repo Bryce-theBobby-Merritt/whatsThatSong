@@ -38,6 +38,7 @@ def guessingGame():
 @app.route("/guess", methods=['POST'])
 def guess():
     guess = request.form.get('song_guess')
+    #TODO game logic to see if the guess is right, if you have enough lives, etc.
     return render_template('guessingGame.html', user_guess=guess, current_song=game.get_current_song().get_name(), search_options=game.get_all_song_names())
 
 

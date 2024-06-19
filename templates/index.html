@@ -7,28 +7,41 @@
     <link href = "{{ url_for('static', filename='css/style.css')}}" rel="stylesheet" />
 </head>
 <body>
+
     {% if preview == None %}
-        <h1>Upload your Playlist None:</h1>
-        <form id="playlist_form" action = "/" method="POST">
-            <input type="text" name="playlist_link" id="playlist" placeholder="Paste your Spotify playlist link:" />
-            <button type="submit">Upload</button>
-        </form>
+    <div id="preupload">
+        <h1>Upload your Playlist:</h1>
+            <form id="playlist_form" action = "/" method="POST">
+                <input type="text" name="playlist_link" id="playlist" placeholder="Paste your Spotify playlist link:" />
+                <button type="submit">Upload</button>
+            </form>
+    </div>
     {% endif %}
 
+
+
     {% if preview != None %}
+    <div id="postupload">
         <h1>Upload a Different Playlist:</h1>
         <form id="playlist_form" action = "/" method="POST">
             <input type="text" name="playlist_link" id="playlist" placeholder="Paste your Spotify playlist link:" />
             <button type="submit">Upload</button>
         </form>
-
-        <ul>
-            {% for result in preview %}
-            <li>{{ result }}</li>
-            {% endfor %}
-        </ul>
-
+            
+        <div id="songpreviews">
+            <ul>
+                {% for result in preview %}
+                    <li id="{{ result }}">
+                        <div id="albCov"></div> <!--find out how to implement jinja results into id names-->
+                        <div id="name">{{ result }}</div>
+                        <div id="removeOption"></div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
     {% endif %}
+
 
     <form id="go_forward_button_form" action="/guessingGame" method="GET">
         <button type="submit">Go!</button>

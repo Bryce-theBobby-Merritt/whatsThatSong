@@ -24,6 +24,7 @@ class Game():
 
     
     def get_all_tracks_from_playlist_id(self) -> None:
+        self._all_songs.clear()
         config = dotenv.dotenv_values(".env")
         sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope="user-library-read", client_id=config["CID"], client_secret=config["SECRET"], redirect_uri=config["REDIRECT_URI"]))
         results = sp.playlist_tracks(f'spotify:playlist:{self._playlist_id}')
@@ -35,6 +36,7 @@ class Game():
         for item in compact_res:
             temp = Song(item[0], item[1], item[3], item[2])        
             self._all_songs.append(temp)
+            
 
     def get_all_songs(self) -> list[Song]:
         return self._all_songs
