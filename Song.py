@@ -25,8 +25,3 @@ class Song():
     def __eq__(self, other) -> bool:
         return (self._name is other.get_name() and self._artist is other.get_artist())
     
-
-s1 = Song("Potato", "PotatoDev", "Song_Potato.wav", "AC_Potato.png")
-s2 = Song("Potato", "PotatoDev", "Song_Potato2.wav", "AC_Potato2.png")
-
-print(s1.__eq__(s2))
