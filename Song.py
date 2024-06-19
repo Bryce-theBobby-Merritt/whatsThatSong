@@ -1,8 +1,8 @@
 class Song():
-    def __init__(self, name: str, artist: str, path: str, album_cover_path: str) -> None:
+    def __init__(self, name: str, artist: str, uri: str, album_cover_path: str) -> None:
         self._name = name
         self._artist = artist
-        self._path = path
+        self._uri = uri
         self._album_cover_path = album_cover_path
 
 
@@ -14,11 +14,11 @@ class Song():
         return self._artist
     
 
-    def get_song_path(self) -> str:
-        return self._path
+    def get_song_uri(self) -> str:
+        return self._uri
     
 
-    def get_album_cover_path(self) -> str:
+    def get_album_cover_url(self) -> str:
         return self._album_cover_path
 
 
