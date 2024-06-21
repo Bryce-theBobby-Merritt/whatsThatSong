@@ -1,9 +1,12 @@
 from Song import Song
 import random
 import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
 from spotipy.oauth2 import SpotifyOAuth
 import dotenv
+import requests
+import base64
+import os
+
 
 class Game():
     def __init__(self):
@@ -13,10 +16,19 @@ class Game():
         self._incorrectly_guessed = []
         self._lives = 3
         self._current_song = None
+        self._API_URL_BASE = "https://api.spotify.com/v1"
+
+        dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+        dotenv.load_dotenv(dotenv_path)
 
 
-    def guess_song(self, guess: str) -> bool:
-        return (self._current_song.get_name().upper() is guess.upper())
+    def guess_song(self, guess: str) -> None:
+        if (self._current_song.get_name().upper() is guess.upper()):
+            #If correct guess: increase score, go next song
+            pass
+        else:
+            #If incorrect guess: decrease lives.
+            pass
 
 
     def set_playlist_id(self, playlist_id: str) -> None:
@@ -25,9 +37,30 @@ class Game():
     
     def get_all_tracks_from_playlist_id(self) -> None:
         self._all_songs.clear()
+
         config = dotenv.dotenv_values(".env")
-        sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope="user-library-read", client_id=config["CID"], client_secret=config["SECRET"], redirect_uri=config["REDIRECT_URI"]))
-        results = sp.playlist_tracks(f'spotify:playlist:{self._playlist_id}')
+
+        headers = {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Authorization": "Basic " + base64.b64encode((os.environ.get("SPOTIPY_CLIENT_ID") + ":" + os.environ.get("SPOTIPY_CLIENT_SECRET")).encode("ascii")).decode("ascii")
+        }
+
+        payload = {
+            "grant_type": "client_credentials"
+        }
+
+        results = requests.post("https://accounts.spotify.com/api/token", data=payload, headers=headers).json()
+        if results:
+            os.environ["SPOTIPY_ACCESS_TOKEN"] = results["access_token"]
+            print(f"Generated Access Token for {results["expires_in"]} seconds with the type: {results["token_type"]}")
+
+        #now that we have established an access token (that typically last 3600 seconds), we can start making fetch calls=
+
+        headers = {
+            "Authorization": "Bearer " + os.environ.get("SPOTIPY_ACCESS_TOKEN")
+        }
+
+        results = requests.get(self._API_URL_BASE + f"/playlists/{self._playlist_id}/tracks", headers=headers).json()
     
         #form of: (name, forst artist, album, uri) 
 
@@ -36,7 +69,8 @@ class Game():
         for item in compact_res:
             temp = Song(item[0], item[1], item[3], item[2])        
             self._all_songs.append(temp)
-            
+
+
 
     def get_all_songs(self) -> list[Song]:
         return self._all_songs
@@ -63,22 +97,25 @@ class Game():
         random.shuffle(self._all_songs)
         self._current_song = self._all_songs.pop(0)
 
+        res = SpotifyOAuth(scope="user-read-playback-state, user-modify-playback-state").get_access_token()
+        self.sp = spotipy.Spotify(auth=res["access_token"])
+
+
+    def play_song_from_id(self, song_id_uri: str) -> None:
+        headers = {
+            "Authorization": "Bearer" + os.environ.get("SPOTIPY_ACCESS_TOKEN")
+        }
+
+        body = {
+            "uri": f"{song_id_uri}"
+        }
+
+        results = requests.post(self._API_URL_BASE + "/me/player/play", data=body, headers=headers).json()
+        if results["error"]:
+            self.sp.start_playback(uris=[song_id_uri])
+
     
     def start(self) -> None:
-        #TODO
         print("[STARTING GAME]")
+        self.play_song_from_id(self._current_song.get_song_uri())
         pass
-
-
-    
-if __name__ == '__main__':
-    config = dotenv.dotenv_values(".env")
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope="user-read-playback-state,user-modify-playback-state", client_id=config["CID"], client_secret=config["SECRET"], redirect_uri=config["REDIRECT_URI"]))
-    g = Game()
-    g.set_playlist_id("312Cr7cPq6bXu4b40ZB2DU")
-    g.get_all_tracks_from_playlist_id()
-    g.ready_game()
-    g.start()
-    print(g.get_current_song().get_name())
-    #sp.start_playback(uris=[g.get_current_song().get_song_uri()])
-    #end conditions: 0 lives, no more songs left.

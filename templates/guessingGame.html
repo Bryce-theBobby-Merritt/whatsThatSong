@@ -11,14 +11,32 @@
     <p>{{ playlist_id }}</p>
 
     <form id="guess" action="/guess" method="POST">
-        <input type="text" name="song_guess" id="song_guess" placeholder="Guess the Song:" />
+        <input type="text" name="song_guess" id="song_guess" placeholder="Guess the Song:" onkeyup="filterFunction()" />
         <button type="submit">GUESS</button>
+        <div class="searchBar">
+            <div id="songList" class="dropdown-content">
+                {% for song in search_options %}
+                    <a>{{ song }}</a>
+                {% endfor %}
+            </div>
+        </div>
     </form>
 
-    <p> Current Song: {{ current_song }}</p>
-
-    <div id="user_guess_div"></div>
-
-    <div id="user_guess_div2"> {% if user_guess != None %} {{ user_guess }} {% endif %}</div>
+    <script>
+        function filterFunction() {
+          const input = document.getElementById("song_guess");
+          const filter = input.value.toUpperCase();
+          const div = document.getElementById("songList");
+          const a = div.getElementsByTagName("a");
+          for (let i = 0; i < a.length; i++) {
+            txtValue = a[i].textContent || a[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+              a[i].style.display = "";
+            } else {
+              a[i].style.display = "none";
+            }
+          }
+        }
+    </script>
 </body>
 </html>

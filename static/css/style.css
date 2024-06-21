@@ -1,12 +1,12 @@
 * {
     box-sizing: border-box;
     align-self: center;
-    overflow-y: hidden
+    overflow-y: hidden;
 }
 
 h1 {
     position: relative;
-    left: 35%;
+    left: 37%;
     width: 35%
 }
 
@@ -29,9 +29,9 @@ form {
     padding: 10px;
     width: 30%;
     left: 35%;
-    top: 300px;
+    top: 45%;
     align-self: center;
-    position: relative;
+    position: fixed;
 }
 
 form input[type=text] {
@@ -109,3 +109,35 @@ div[id='songpreviews'] {
     overflow-y: scroll;
     overflow-x: hidden;
 }
+
+.searchBar {
+    position: relative;
+    display: inline-block, show;
+    min-width: 30%;
+    min-height: 300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding-top: 0%;
+    padding-left: 0%;
+}
+  
+.dropdown-content {
+    display: show;
+    position: absolute;
+    background-color: #908686;
+    min-height: fit-content;
+    overflow: auto;
+    border: 1px solid #dddddd;
+    z-index: 1;
+}
+  
+.dropdown-content a {
+    color: rgb(255, 255, 255);
+    padding: 10px 0px;
+    text-decoration: none;
+    display: block;
+    text-emphasis: 1px black;
+}
+
+
+.show {display: block;}
